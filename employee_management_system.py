@@ -20,6 +20,9 @@ class Employee( object ):
         self.center_root()
         self.root.configure( background = 'deep sky blue' )
         self.create_frames()
+        self.create_fonts()
+        self.create_variables()
+        self.create_widgets()
 
     def screen_size( self, size ):
         # Obtain desired screen size
@@ -95,6 +98,30 @@ class Employee( object ):
                                 rely = 0.903,
                                 relwidth = 1,
                                 relheight = 0.1 )
+
+#===========================Fonts=======================================
+
+    def create_fonts( self ):
+        
+        self.lbl_font = font.Font( family = 'DejaVu Serif',
+                                   size = 12,
+                                   weight = 'bold' )
+        self.ent_font = font.Font( family = 'DejaVu Serif',
+                                   size = 12,
+                                   weight = 'bold' )
+        self.btn_font = font.Font( family = 'Bitstream Charter',
+                                   size = 16,
+                                   weight = 'bold' )
+
+#===========================Variables===================================
+
+    def create_variables( self ):
+        pass                                   
+
+#===========================Create Widgets==============================
+ 
+    def create_widgets( self ):
+        pass                                
                                 
 
 
