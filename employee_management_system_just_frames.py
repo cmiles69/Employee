@@ -51,6 +51,15 @@ class Employee( object ):
                              relwidth = 0.5,
                              relheight = 0.65 )
 
+        self.frm_left_inner = tkinter.Frame( self.frm_left,
+                            borderwidth = 10,
+                            background = 'pale green',
+                            relief = tkinter.RIDGE )
+        self.frm_left_inner.place( relx = 0,
+                                   rely = 0.60,
+                                   relwidth = 1,
+                                   relheight = 0.4 )
+
         self.frm_middle = tkinter.Frame( self.root,
                             borderwidth = 10,
                             background = 'dark salmon',
