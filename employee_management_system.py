@@ -5,6 +5,8 @@
 #
 
 import tkinter
+from tkinter import font
+from tkinter import ttk
 
 class Employee( object ):
 
@@ -55,7 +57,7 @@ class Employee( object ):
                              relheight = 0.65 )
 
         self.frm_left_inner = tkinter.Frame( self.frm_left,
-                            borderwidth = 10,
+                            borderwidth = 5,
                             background = 'pale green',
                             relief = tkinter.RIDGE )
         self.frm_left_inner.place( relx = 0,
@@ -104,10 +106,10 @@ class Employee( object ):
     def create_fonts( self ):
         
         self.lbl_font = font.Font( family = 'DejaVu Serif',
-                                   size = 12,
+                                   size = 15,
                                    weight = 'bold' )
         self.ent_font = font.Font( family = 'DejaVu Serif',
-                                   size = 12,
+                                   size = 15,
                                    weight = 'bold' )
         self.btn_font = font.Font( family = 'Bitstream Charter',
                                    size = 16,
@@ -116,15 +118,300 @@ class Employee( object ):
 #===========================Variables===================================
 
     def create_variables( self ):
-        pass                                   
+        self.reference     = tkinter.StringVar()
+        self.firstname     = tkinter.StringVar()
+        self.surname       = tkinter.StringVar()
+        self.address       = tkinter.StringVar()
+        self.gender        = tkinter.StringVar()
+        self.mobile        = tkinter.StringVar()
+        self.city          = tkinter.StringVar()
+        self.student_loan  = tkinter.StringVar()
+        self.other_payment = tkinter.StringVar()
+        self.NI_payment    = tkinter.StringVar()
+        self.basic_salary  = tkinter.StringVar()
+        self.pension       = tkinter.StringVar()
+        self.over_time     = tkinter.StringVar()
+        self.tax           = tkinter.StringVar()                                   
 
 #===========================Create Widgets==============================
- 
+
     def create_widgets( self ):
-        pass                                
-                                
+        self.create_widgets_left()
+        self.create_widgets_left_inner()
+ 
+    def create_widgets_left( self ):
+        self.lbl_reference = tkinter.Label( self.frm_left,
+                            font = self.lbl_font,
+                            text = 'Reference :',
+                            borderwidth = 3,
+                            background = 'RoyalBlue4',
+                            foreground = 'lavender',
+                            relief = tkinter.FLAT )
+        self.lbl_reference.place( relx = 0,
+                                  rely = 0 )
+        self.ent_reference = tkinter.Entry( self.frm_left,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.reference )
+        self.ent_reference.place( relx = 0.23,
+                                  rely = 0 )
 
+        self.lbl_firstname = tkinter.Label( self.frm_left,
+                            font = self.lbl_font,
+                            text = 'Firstname :',
+                            borderwidth = 3,
+                            background = 'RoyalBlue4',
+                            foreground = 'lavender',
+                            relief = tkinter.FLAT )
+        self.lbl_firstname.place( relx = 0,
+                                  rely = 0.1 )
+        self.ent_firstname = tkinter.Entry( self.frm_left,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.firstname )
+        self.ent_firstname.place( relx = 0.23,
+                                  rely = 0.1 )
 
+        self.lbl_surname = tkinter.Label( self.frm_left,
+                            font = self.lbl_font,
+                            text = 'Surname :',
+                            borderwidth = 3,
+                            background = 'RoyalBlue4',
+                            foreground = 'lavender',
+                            relief = tkinter.FLAT )
+        self.lbl_surname.place( relx = 0.017,
+                                rely = 0.2 )
+        self.ent_surname = tkinter.Entry( self.frm_left,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.surname )
+        self.ent_surname.place( relx = 0.23,
+                                rely = 0.2 )
+
+        self.lbl_address = tkinter.Label( self.frm_left,
+                            font = self.lbl_font,
+                            text = 'Address :',
+                            borderwidth = 3,
+                            background = 'RoyalBlue4',
+                            foreground = 'lavender',
+                            relief = tkinter.FLAT )
+        self.lbl_address.place( relx = 0.033,
+                                rely = 0.3 )
+
+        self.ent_address = tkinter.Entry( self.frm_left,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.address )
+        self.ent_address.place( relx = 0.23,
+                                rely = 0.3 )
+
+        self.lbl_gender = tkinter.Label( self.frm_left,         
+                            font = self.lbl_font,
+                            text = 'Gender :',
+                            borderwidth = 3,
+                            background = 'RoyalBlue4',
+                            foreground = 'lavender',
+                            relief = tkinter.FLAT )
+        self.lbl_gender.place( relx = 0.042,
+                               rely = 0.4 )
+        style = ttk.Style()
+        style.map( 'TCombobox',
+                    fieldbackground = [('readonly','green')])
+        style.map( 'TCombobox',
+                    selectbackground = [('readonly','green')])
+        style.map( 'TCombobox',
+                    selectforeground = [('readonly','black')])
+                                                                        
+        self.ent_gender = ttk.Combobox( self.frm_left,
+                            font = self.ent_font,
+                            background = 'green',                       
+                            textvariable = self.gender )
+        self.ent_gender['values'] = ( '',
+                                      'Male',
+                                      'Female',
+                                      'Transsexual',
+                                      'Trans Man',
+                                      'Trans Women',
+                                      'Transitioning',
+                                      'Genderqueer',
+                                      'Indeterminate Sex',
+                                      'Not Stated',
+                                      'Refused to answer',
+                                      'Response Unidentifiable' )
+        self.ent_gender['state'] = 'readonly'
+        self.ent_gender.current( 0 )
+        self.ent_gender.place( relx = 0.23,
+                               rely = 0.4,
+                               relwidth = 0.416,
+                               relheight = 0.065 )
+        
+        self.lbl_mobile = tkinter.Label( self.frm_left,
+                            font = self.lbl_font,
+                            text = 'Mobile :',
+                            borderwidth = 3,
+                            background = 'RoyalBlue4',
+                            foreground = 'lavender',
+                            relief = tkinter.FLAT )
+        self.lbl_mobile.place( relx = 0.048,
+                               rely = 0.5 )
+        self.ent_mobile = tkinter.Entry( self.frm_left,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.mobile )
+        self.ent_mobile.place( relx = 0.23,
+                               rely = 0.5 )
+
+#===========================Left Inner==================================
+
+    def create_widgets_left_inner( self ):
+        self.lbl_city = tkinter.Label( self.frm_left_inner,
+                            font = self.lbl_font,
+                            text = 'City Weighting :',
+                            borderwidth = 3,
+                            background = 'pale green',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_city.place( relx = 0,
+                             rely = 0 )
+        self.ent_city = tkinter.Entry( self.frm_left_inner,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.city )
+        self.ent_city.place( relx = 0.29,
+                             rely = 0,
+                             relwidth = 0.22 )
+
+        self.lbl_student_loan = tkinter.Label( self.frm_left_inner,
+                            font = self.lbl_font,
+                            text = 'Student Loan :',
+                            borderwidth = 3,
+                            background = 'pale green',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_student_loan.place( relx = 0.52,
+                                     rely = 0 )
+        self.ent_student_loan = tkinter.Entry( self.frm_left_inner,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.student_loan )
+        self.ent_student_loan.place( relx = 0.78,
+                                     rely = 0,
+                                     relwidth = 0.22 )
+
+        self.lbl_other_payment = tkinter.Label( self.frm_left_inner,
+                            font = self.lbl_font,
+                            text = 'Other Payment :',
+                            borderwidth = 3,
+                            background = 'pale green',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_other_payment.place( relx = 0,
+                                      rely = 0.25 )
+        self.ent_other_payment = tkinter.Entry( self.frm_left_inner,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.other_payment )
+        self.ent_other_payment.place( relx = 0.29,
+                                      rely = 0.25,
+                                      relwidth = 0.22 )
+
+        self.lbl_NI_payment = tkinter.Label( self.frm_left_inner,
+                            font = self.lbl_font,
+                            text = 'NI Payment :',
+                            borderwidth = 3,
+                            background = 'pale green',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_NI_payment.place( relx = 0.547,
+                                   rely = 0.25 )
+        self.ent_NI_payment = tkinter.Entry( self.frm_left_inner,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.NI_payment )
+        self.ent_NI_payment.place( relx = 0.78,
+                                   rely = 0.25,
+                                   relwidth = 0.22 )
+
+        self.lbl_basic_salary = tkinter.Label( self.frm_left_inner,
+                            font = self.lbl_font,
+                            text = 'Basic Salary :',
+                            borderwidth = 3,
+                            background = 'pale green',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_basic_salary.place( relx = 0.044,
+                                     rely = 0.50 )
+        self.ent_basic_salary = tkinter.Entry( self.frm_left_inner,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.basic_salary )
+        self.ent_basic_salary.place( relx = 0.29,
+                                     rely = 0.50,
+                                     relwidth = 0.22 )
+
+        self.lbl_pension = tkinter.Label( self.frm_left_inner,
+                            font = self.lbl_font,
+                            text = 'Pension :',
+                            borderwidth = 3,
+                            background = 'pale green',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_pension.place( relx = 0.606,
+                                rely = 0.50 )
+        self.ent_pension = tkinter.Entry( self.frm_left_inner,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.pension )
+        self.ent_pension.place( relx = 0.78,
+                                rely = 0.50,
+                                relwidth = 0.22 )
+
+        self.lbl_over_time = tkinter.Label( self.frm_left_inner,
+                            font = self.lbl_font,
+                            text = 'Over Time :',
+                            borderwidth = 3,
+                            background = 'pale green',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_over_time.place( relx = 0.076,
+                                  rely = 0.75 )
+        self.ent_over_time = tkinter.Entry( self.frm_left_inner,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.over_time )
+        self.ent_over_time.place( relx = 0.29,
+                                  rely = 0.75,
+                                  relwidth = 0.22 )
+
+        self.lbl_tax = tkinter.Label( self.frm_left_inner,
+                            font = self.lbl_font,
+                            text = 'Tax :',
+                            borderwidth = 3,
+                            background = 'pale green',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_tax.place( relx = 0.677,
+                            rely = 0.75 )
+        self.ent_tax = tkinter.Entry( self.frm_left_inner,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.tax )
+        self.ent_tax.place( relx = 0.78,
+                            rely = 0.75,
+                            relwidth = 0.22 )
 if __name__ == '__main__':
     root = tkinter.Tk()
     application = Employee( root )
