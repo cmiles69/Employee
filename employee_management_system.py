@@ -7,6 +7,7 @@
 import tkinter
 from tkinter import font
 from tkinter import ttk
+from tkcalendar import DateEntry
 
 class Employee( object ):
 
@@ -118,26 +119,37 @@ class Employee( object ):
 #===========================Variables===================================
 
     def create_variables( self ):
-        self.reference     = tkinter.StringVar()
-        self.firstname     = tkinter.StringVar()
-        self.surname       = tkinter.StringVar()
-        self.address       = tkinter.StringVar()
-        self.gender        = tkinter.StringVar()
-        self.mobile        = tkinter.StringVar()
-        self.city          = tkinter.StringVar()
-        self.student_loan  = tkinter.StringVar()
-        self.other_payment = tkinter.StringVar()
-        self.NI_payment    = tkinter.StringVar()
-        self.basic_salary  = tkinter.StringVar()
-        self.pension       = tkinter.StringVar()
-        self.over_time     = tkinter.StringVar()
-        self.tax           = tkinter.StringVar()                                   
+        self.reference       = tkinter.StringVar()
+        self.firstname       = tkinter.StringVar()
+        self.surname         = tkinter.StringVar()
+        self.address         = tkinter.StringVar()
+        self.gender          = tkinter.StringVar()
+        self.mobile          = tkinter.StringVar()
+        self.city            = tkinter.StringVar()
+        self.student_loan    = tkinter.StringVar()
+        self.other_payment   = tkinter.StringVar()
+        self.NI_payment      = tkinter.StringVar()
+        self.basic_salary    = tkinter.StringVar()
+        self.pension         = tkinter.StringVar()
+        self.over_time       = tkinter.StringVar()
+        self.tax             = tkinter.StringVar()
+        self.pensionable_pay = tkinter.StringVar()
+        self.taxable_pay     = tkinter.StringVar()
+        self.tax_period      = tkinter.StringVar()
+        self.tax_code        = tkinter.StringVar()
+        self.NI_number       = tkinter.StringVar()
+        self.NI_code         = tkinter.StringVar()
+        self.deductions      = tkinter.StringVar()
+        self.gross_pay       = tkinter.StringVar()
+        self.net_pay         = tkinter.StringVar()
+        self.pay_day         = tkinter.StringVar()                                   
 
 #===========================Create Widgets==============================
 
     def create_widgets( self ):
         self.create_widgets_left()
         self.create_widgets_left_inner()
+        self.create_widgets_middle()
  
     def create_widgets_left( self ):
         self.lbl_reference = tkinter.Label( self.frm_left,
@@ -154,7 +166,7 @@ class Employee( object ):
                             borderwidth = 3,
                             background = 'green',
                             textvariable = self.reference )
-        self.ent_reference.place( relx = 0.23,
+        self.ent_reference.place( relx = 0.21,
                                   rely = 0 )
 
         self.lbl_firstname = tkinter.Label( self.frm_left,
@@ -171,7 +183,7 @@ class Employee( object ):
                             borderwidth = 3,
                             background = 'green',
                             textvariable = self.firstname )
-        self.ent_firstname.place( relx = 0.23,
+        self.ent_firstname.place( relx = 0.21,
                                   rely = 0.1 )
 
         self.lbl_surname = tkinter.Label( self.frm_left,
@@ -188,7 +200,7 @@ class Employee( object ):
                             borderwidth = 3,
                             background = 'green',
                             textvariable = self.surname )
-        self.ent_surname.place( relx = 0.23,
+        self.ent_surname.place( relx = 0.21,
                                 rely = 0.2 )
 
         self.lbl_address = tkinter.Label( self.frm_left,
@@ -206,7 +218,7 @@ class Employee( object ):
                             borderwidth = 3,
                             background = 'green',
                             textvariable = self.address )
-        self.ent_address.place( relx = 0.23,
+        self.ent_address.place( relx = 0.21,
                                 rely = 0.3 )
 
         self.lbl_gender = tkinter.Label( self.frm_left,         
@@ -244,7 +256,7 @@ class Employee( object ):
                                       'Response Unidentifiable' )
         self.ent_gender['state'] = 'readonly'
         self.ent_gender.current( 0 )
-        self.ent_gender.place( relx = 0.23,
+        self.ent_gender.place( relx = 0.21,
                                rely = 0.4,
                                relwidth = 0.416,
                                relheight = 0.065 )
@@ -263,7 +275,7 @@ class Employee( object ):
                             borderwidth = 3,
                             background = 'green',
                             textvariable = self.mobile )
-        self.ent_mobile.place( relx = 0.23,
+        self.ent_mobile.place( relx = 0.21,
                                rely = 0.5 )
 
 #===========================Left Inner==================================
@@ -412,6 +424,201 @@ class Employee( object ):
         self.ent_tax.place( relx = 0.78,
                             rely = 0.75,
                             relwidth = 0.22 )
+
+#=========================Middle Frame Widgets==========================
+
+    def create_widgets_middle( self ):
+        self.lbl_pensionable_pay = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'Pensionable Pay :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_pensionable_pay.place( relx = 0,
+                                        rely = 0 )
+        self.ent_pensionable_pay = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.pensionable_pay )
+        self.ent_pensionable_pay.place( relx = 0.62,
+                                        rely = 0,
+                                        relwidth = 0.38 )
+
+        self.lbl_taxable_pay = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'Taxable Pay :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_taxable_pay.place( relx = 0.145,
+                                    rely = 0.1 )
+        self.ent_taxable_pay = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.taxable_pay )
+        self.ent_taxable_pay.place( relx = 0.62,
+                                    rely = 0.1,
+                                    relwidth = 0.38 )
+
+        self.lbl_tax_period = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'Tax Period :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_tax_period.place( relx = 0.185,
+                                   rely = 0.2 )
+        self.ent_tax_period = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.tax_period )
+        self.ent_tax_period.place( relx = 0.62,
+                                   rely = 0.2,
+                                   relwidth = 0.38 )
+
+        self.lbl_tax_code = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'Tax Code :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_tax_code.place( relx = 0.235,
+                                 rely = 0.3 )
+        self.ent_tax_code = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.tax_code )
+        self.ent_tax_code.place( relx = 0.62,
+                                 rely = 0.3,
+                                 relwidth = 0.38 )
+
+        self.lbl_NI_number = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'NI Number :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_NI_number.place( relx = 0.169,
+                                  rely = 0.4 )
+        self.ent_NI_number = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.NI_number )
+        self.ent_NI_number.place( relx = 0.62,
+                                  rely = 0.4,
+                                  relwidth = 0.38 )
+
+        self.lbl_NI_code = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'NI Code :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_NI_code.place( relx = 0.276,
+                                rely = 0.5 )
+        self.ent_NI_code = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.NI_code )
+        self.ent_NI_code.place( relx = 0.62,
+                                rely = 0.5,
+                                relwidth = 0.38 )
+
+        self.lbl_deductions = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'Deductions :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_deductions.place( relx = 0.167,
+                                   rely = 0.6 )
+        self.ent_deductions = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.deductions )
+        self.ent_deductions.place( relx = 0.62,
+                                   rely = 0.6,
+                                   relwidth = 0.38 )
+
+        self.lbl_gross_pay = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'Gross Pay :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_gross_pay.place( relx = 0.217,
+                                  rely = 0.7 )
+        self.ent_gross_pay = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.gross_pay )
+        self.ent_gross_pay.place( relx = 0.62,
+                                  rely = 0.7,
+                                  relwidth = 0.38 )
+
+        self.lbl_net_pay = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'Net Pay :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_net_pay.place( relx = 0.286,
+                                rely = 0.8 )
+        self.ent_net_pay = tkinter.Entry( self.frm_middle,
+                            font = self.ent_font,
+                            borderwidth = 3,
+                            background = 'green',
+                            textvariable = self.net_pay )
+        self.ent_net_pay.place( relx = 0.62,
+                                rely = 0.8,
+                                relwidth = 0.38 )
+
+        self.lbl_pay_day = tkinter.Label( self.frm_middle,
+                            font = self.lbl_font,
+                            text = 'Pay Day :',
+                            borderwidth = 3,
+                            background = 'dark salmon',
+                            foreground = 'blue',
+                            relief = tkinter.FLAT )
+        self.lbl_pay_day.place( relx = 0.282,
+                                rely = 0.9 )
+
+        style = ttk.Style()
+        style.configure('my.DateEntry',
+                        fieldbackground='green',
+                        background='dark green',
+                        foreground='dark blue',
+                        arrowcolor='white')
+
+        self.ent_pay_day = DateEntry( self.frm_middle,
+                            font = self.ent_font,
+                            style = 'my.DateEntry',
+                            borderwidth = 3,
+                            bordercolor = 'green',
+                            background = 'green',
+                            foreground = 'blue',
+                            date_pattern = 'dd-mm-y',
+                            textvariable = self.pay_day )
+        self.ent_pay_day.place( relx = 0.62,
+                                rely = 0.9,
+                                relwidth = 0.38 )
 if __name__ == '__main__':
     root = tkinter.Tk()
     application = Employee( root )
