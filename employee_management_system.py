@@ -943,13 +943,42 @@ class Employee( object ):
         string_ni = '$' + str( '%.2f' % ( self._NI_payment ))
         return( string_ni )
 
+    def generate_random_gross_pay( self ):
+        self._gross_pay = ( self.BS + self.CW + self.OT )
+        string_gross = '$' + str( '%2.f' % ( self._gross_pay ))
+        return( string_gross )
+
+    def generate_random_net_pay( self ):
+        self._net_pay = ( self.BS + self.CW + self.OT ) - self.DEDUCTIONS
+        string_net_pay = '$' + str( '%.2f' % ( self._net_pay ))
+        return( string_net_pay )
+
     def generate_random_deductions( self ):
-        DEDUCTIONS = ( self._tax +
+        self.DEDUCTIONS = ( self._tax +
                        self._pension +
                        self._student_loan +
                        self._NI_payment )
-        string_deduct = '$' + str( '%2.f' % ( DEDUCTIONS ))
+        string_deduct = '$' + str( '%2.f' % ( self.DEDUCTIONS ))
         return( string_deduct )
+
+    def generate_random_ni_code( self ):
+        rand_ni_code = secrets.token_hex( 3 )
+        string_nicode = ( str( 'NI-' + rand_ni_code ))
+        return( string_nicode )
+
+    def generate_random_ni_number( self ):
+        ni_pay = random.randint( 34051, 409123 )
+        _ni_number = ( 'NI-' + str( ni_pay ))
+        return( _ni_number )
+
+    def generate_random_tax_code( self ):
+        taxcode = secrets.token_hex( 4 )
+        string_tax_code = ( str( 'TC-' + taxcode ))
+        return( string_tax_code )
+
+    def generate_random_tax_period( self ):
+        RTP = random.randint( 4, 13 )
+        return( RTP )
 
     def generate_random_first_name( self ):
         return( names.get_first_name())
@@ -989,6 +1018,14 @@ class Employee( object ):
         self.student_loan.set( self.generate_random_student_loan())
         self.NI_payment.set( self.generate_random_NI_payment())
         self.deductions.set( self.generate_random_deductions())
+        self.gross_pay.set( self.generate_random_gross_pay())
+        self.net_pay.set( self.generate_random_net_pay())
+        self.taxable_pay.set( self.tax.get())
+        self.pensionable_pay.set( self.pension.get())
+        self.NI_code.set( self.generate_random_ni_code())
+        self.NI_number.set( self.generate_random_ni_number())
+        self.tax_code.set( self.generate_random_tax_code())
+        self.tax_period.set( self.generate_random_tax_period())
 
 
 
