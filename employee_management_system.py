@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 # coding = utf-8
 
-# https://www.youtube.com/watch?v=1xGh0bmGOrw Captain D.J Oamen
-#
+# https://www.youtube.com/watch?v=1rzaEXL016g Captain D.J Oamen
+# 25:10, 28:26, 38:23, 43:40, 48:00, 54:35, 57:55
 
 import tkinter
+import tkinter.scrolledtext as tkst
+import secrets
+import names
+import random
+import employee_DB
+import tkinter.messagebox
 from tkinter import font
 from tkinter import ttk
 from tkcalendar import DateEntry
+from faker import Faker
+
 
 class Employee( object ):
 
@@ -20,6 +28,7 @@ class Employee( object ):
         self.geometry = self.screen_size( size = 0.75 )
         # print( self.geometry )
         self.root.geometry( self.geometry )
+        self.root.protocol( 'WM_DELETE_WINDOW', self.Ask_Quit )
         self.center_root()
         self.root.configure( background = 'deep sky blue' )
         self.create_frames()
@@ -125,11 +134,11 @@ class Employee( object ):
         self.address         = tkinter.StringVar()
         self.gender          = tkinter.StringVar()
         self.mobile          = tkinter.StringVar()
-        self.city            = tkinter.StringVar()
+        self.city            = tkinter.IntVar()
         self.student_loan    = tkinter.StringVar()
         self.other_payment   = tkinter.StringVar()
         self.NI_payment      = tkinter.StringVar()
-        self.basic_salary    = tkinter.StringVar()
+        self.basic_salary    = tkinter.IntVar()
         self.pension         = tkinter.StringVar()
         self.over_time       = tkinter.StringVar()
         self.tax             = tkinter.StringVar()
@@ -144,12 +153,17 @@ class Employee( object ):
         self.net_pay         = tkinter.StringVar()
         self.pay_day         = tkinter.StringVar()                                   
 
-#===========================Create Widgets==============================
+#===================Create Widgets Dispatch=============================
 
     def create_widgets( self ):
         self.create_widgets_left()
         self.create_widgets_left_inner()
         self.create_widgets_middle()
+        self.create_widgets_right()
+        self.create_widgets_bottom()
+        self.create_widgets_button()
+
+#========================Left Frame Widgets=============================
  
     def create_widgets_left( self ):
         self.lbl_reference = tkinter.Label( self.frm_left,
@@ -219,7 +233,8 @@ class Employee( object ):
                             background = 'green',
                             textvariable = self.address )
         self.ent_address.place( relx = 0.21,
-                                rely = 0.3 )
+                                rely = 0.3,
+                                relwidth = 0.788 )
 
         self.lbl_gender = tkinter.Label( self.frm_left,         
                             font = self.lbl_font,
@@ -230,14 +245,17 @@ class Employee( object ):
                             relief = tkinter.FLAT )
         self.lbl_gender.place( relx = 0.042,
                                rely = 0.4 )
+               
         style = ttk.Style()
         style.map( 'TCombobox',
                     fieldbackground = [('readonly','green')])
         style.map( 'TCombobox',
+                    activebackground = [('readonly','green')])
+        style.map( 'TCombobox',
                     selectbackground = [('readonly','green')])
         style.map( 'TCombobox',
                     selectforeground = [('readonly','black')])
-                                                                        
+                                                                  
         self.ent_gender = ttk.Combobox( self.frm_left,
                             font = self.ent_font,
                             background = 'green',                       
@@ -278,7 +296,7 @@ class Employee( object ):
         self.ent_mobile.place( relx = 0.21,
                                rely = 0.5 )
 
-#===========================Left Inner==================================
+#===========================Left Inner Frame Widgets====================
 
     def create_widgets_left_inner( self ):
         self.lbl_city = tkinter.Label( self.frm_left_inner,
@@ -597,7 +615,7 @@ class Employee( object ):
                             background = 'dark salmon',
                             foreground = 'blue',
                             relief = tkinter.FLAT )
-        self.lbl_pay_day.place( relx = 0.282,
+        self.lbl_pay_day.place( relx = 0.280,
                                 rely = 0.9 )
 
         style = ttk.Style()
@@ -619,6 +637,362 @@ class Employee( object ):
         self.ent_pay_day.place( relx = 0.62,
                                 rely = 0.9,
                                 relwidth = 0.38 )
+
+#=========================Right Frame Widgets===========================
+
+    def create_widgets_right( self ):
+        self.text_scroll_reciept = tkst.ScrolledText( self.frm_right,
+                            font = self.lbl_font,
+                            borderwidth = 5,
+                            background = 'LightPink4',
+                            relief = tkinter.RIDGE )
+        self.text_scroll_reciept.place( relx = 0,
+                                        rely = 0,
+                                        relwidth = 1,
+                                        relheight = 1 )
+
+#=======================Bottom Frame widgets============================
+
+    def create_widgets_bottom( self ):
+        style = ttk.Style()
+        style.configure( 'Treeview.Heading', font = self.lbl_font )
+        style.configure( 'Treeview', background = 'red',
+                                     foreground = 'blue' )
+
+        self.tree_view = ttk.Treeview( self.frm_bottom,
+            column = ( 'column1',
+                       'column2',
+                       'column3',
+                       'column4',
+                       'column5' ), show = 'headings' )
+        self.tree_view.column( 'column1', width = 100 )
+        self.tree_view.column( 'column2', width = 120 )
+        self.tree_view.column( 'column3', width = 120 )
+        self.tree_view.column( 'column4', width = 120 )
+        self.tree_view.heading( '#1', text = 'Reference :' )
+        self.tree_view.heading( '#2', text = 'First Name :' )
+        self.tree_view.heading( '#3', text = 'Surname :' )
+        self.tree_view.heading( '#4', text = 'Mobile :' )
+        self.tree_view.heading( '#5', text = 'Address :' )
+        # self.tree_view.bind( '<<TreeviewSelect>>',
+        #                     self.On_Tree_Select )
+        self.tree_view.place( relx = 0,
+                              rely = 0,
+                              relwidth = 1,
+                              relheight = 1 )
+
+#=======================Button Callbacks================================
+
+    def Ask_Quit( self ):
+        exit_program = tkinter.messagebox.askyesno(
+            title = 'Employee Database System',
+            message = 'Confirm if you want to exit program?' )
+        if exit_program > 0:
+            self.root.destroy()
+        else:
+            return( None )
+
+    def Display( self ):
+        ''' Recieving all the records, but only showing selected'''
+        for idx in self.tree_view.get_children():
+            self.tree_view.delete( idx )
+        for row in employee_DB.view_employee_record():
+            self.tree_view.insert( '', tkinter.END,
+                                    values = ( row[r'Customer_ID'],
+                                               row[r'Firstname'],
+                                               row[r'Surname'],
+                                               row[r'Mobile'],
+                                               row[r'Address'] ))
+
+    def Add_New( self ):
+        self.employee_record = [( self.reference.get(),      
+                                  self.firstname.get(),      
+                                  self.surname.get(),        
+                                  self.address.get(),        
+                                  self.gender.get(),         
+                                  self.mobile.get(),
+                                  self.NI_number.get(),
+                                  self.student_loan.get(),
+                                  self.tax.get(),
+                                  self.pension.get(),
+                                  self.deductions.get(),
+                                  self.gross_pay.get(),
+                                  self.net_pay.get())]
+        last_row_id = \
+        employee_DB.add_employee_record( self.employee_record )
+        print( 'Last Row ID is :', last_row_id )
+
+    def Update( self ):
+        EMP_REF = self.reference.get()
+        self.employee_record = [( self.reference.get(),      
+                                  self.firstname.get(),      
+                                  self.surname.get(),        
+                                  self.address.get(),        
+                                  self.gender.get(),         
+                                  self.mobile.get(),
+                                  self.NI_number.get(),
+                                  self.student_loan.get(),
+                                  self.tax.get(),
+                                  self.pension.get(),
+                                  self.deductions.get(),
+                                  self.gross_pay.get(),
+                                  self.net_pay.get(), EMP_REF )]
+        employee_DB.update_employee_record( self.employee_record )
+
+    def Search( self ):
+        EMP_REF = self.On_Tree_Select( event = None )
+        search_data = employee_DB.search_employee_record( EMP_REF )
+        self.Reset()
+        self.reference.set( search_data[r'Reference'])     
+        self.firstname.set( search_data[r'Firstname'])     
+        self.surname.set( search_data[r'Surname'])        
+        self.address.set( search_data[r'Address'])        
+        self.gender.set( search_data[r'Gender'])         
+        self.mobile.set( search_data[r'Mobile'])
+        self.NI_number.set( search_data[r'NI_Number'])
+        self.student_loan.set( search_data[r'Student_Loan'])
+        self.tax.set( search_data[r'Tax'])
+        self.pension.set( search_data[r'Pension'])
+        self.deductions.set( search_data[r'Deductions'])
+        self.gross_pay.set( search_data[r'Gross_pay'])
+        self.net_pay.set( search_data[r'Net_pay'])
+
+
+    def On_Tree_Select(self, event):
+        item = self.tree_view.selection()[0]
+        ''' Return Reference Number '''
+        return( self.tree_view.item( item )['values'][0] )                            
+
+    def Random( self ):
+        self.create_random_employee_information()
+
+    def Reset( self ):
+        self.reference.set( '' )      
+        self.firstname.set( '' )      
+        self.surname.set( '' )        
+        self.address.set( '' )        
+        self.gender.set( '' )         
+        self.mobile.set( '' )         
+        self.city.set( '' )           
+        self.student_loan.set( '' )   
+        self.other_payment.set( '' )  
+        self.NI_payment.set( '' )     
+        self.basic_salary.set( '' )   
+        self.pension.set( '' )        
+        self.over_time.set( '' )      
+        self.tax.set( '' )            
+        self.pensionable_pay.set( '' )
+        self.taxable_pay.set( '' )    
+        self.tax_period.set( '' )     
+        self.tax_code.set( '' )       
+        self.NI_number.set( '' )      
+        self.NI_code.set( '' )        
+        self.deductions.set( '' )     
+        self.gross_pay.set( '' )      
+        self.net_pay.set( '' )        
+        self.pay_day.set( '' )
+        self.text_scroll_reciept.delete( 1.0, tkinter.END )                                      
+
+#=======================Button Frame Widgets============================
+
+    def create_widgets_button( self ):
+        self.btn_add_new = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'blue',
+                            foreground = 'gold',
+                            activeforeground = 'gold',
+                            activebackground = 'green',
+                            #command = self.Add_New,
+                            text = 'Add New' )
+        self.btn_add_new.place( relx = 0.006,
+                                rely = 0,
+                                relheight = 1 )
+
+        self.btn_print = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'CadetBlue3',
+                            foreground = 'black',
+                            activeforeground = 'gold',
+                            activebackground = 'green',
+                            #command = self.Print,
+                            text = 'Print' )
+        self.btn_print.place( relx = 0.101,
+                              rely = 0,
+                              relheight = 1 )
+
+        self.btn_display = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'steel blue',
+                            foreground = 'gold',
+                            activeforeground = 'gold',
+                            activebackground = 'green',
+                            #command = self.Display,
+                            text = 'Display' )
+        self.btn_display.place( relx = 0.167,
+                                rely = 0,
+                                relheight = 1 )
+
+        self.btn_update = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'SlateGray4',
+                            foreground = 'gold',
+                            activeforeground = 'gold',
+                            activebackground = 'green',
+                            #command = self.Update,
+                            text = 'Update' )
+        self.btn_update.place( relx = 0.250,
+                               rely = 0,
+                               relheight = 1 )
+
+        self.btn_delete = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'red4',
+                            foreground = 'gold',
+                            activeforeground = 'gold',
+                            activebackground = 'black',
+                            #command = self.Delete,
+                            text = 'Delete' )
+        self.btn_delete.place( relx = 0.332,
+                               rely = 0,
+                               relheight = 1 )
+
+        self.btn_random = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'purple1',
+                            foreground = 'gold',
+                            activeforeground = 'gold',
+                            activebackground = 'royal blue',
+                            command = self.Random,
+                            text = 'Random' )
+        self.btn_random.place( relx = 0.407,
+                               rely = 0,
+                               relheight = 1 )
+
+        self.btn_reset = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'gray26',
+                            foreground = 'gold',
+                            activeforeground = 'red',
+                            activebackground = 'powder blue',
+                            command = self.Reset,
+                            text = 'Reset' )
+        self.btn_reset.place( relx = 0.497,
+                              rely = 0,
+                              relheight = 1 )
+
+        self.btn_exit = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'orchid1',
+                            foreground = 'gold',
+                            activeforeground = 'cyan',
+                            activebackground = 'gray8',
+                            command = self.Ask_Quit,
+                            text = 'Exit' )
+        self.btn_exit.place( relx = 0.567,
+                             rely = 0,
+                             relheight = 1 )
+
+#===================Random Employee Information=========================
+
+    def generate_random_other_pay( self ):
+        self.OPD = random.random()
+        # print( OPD )
+        string_other_pay = '$' + ( '%0.3f' % self.OPD )
+        return( string_other_pay )
+
+    def generate_random_over_time( self ):
+        self.OT = float( random.randint( 2, 8215 ))
+        string_overtime = '$' + str( '%2.f' % ( self.OT ))
+        return( string_overtime )
+
+    def generate_random_basic_salary( self ):
+        self.BS = float( random.randint( 34051, 809123 ))
+        string_basic_salary = '$' + str( '%2.f' % ( self.BS ))
+        return( string_basic_salary )
+
+    def generate_random_city_weighting( self ):
+        self.CW = float( random.randint( 2456, 18593 ))
+        string_city_weighting = '$' + str( '%2.f' % ( self.CW ))
+        return( string_city_weighting )
+
+    def generate_random_tax( self ):
+        self._tax = (( self.BS + self.CW + self.OT ) * 0.3 )
+        string_tax = '$' + str( '%.2f' % ( self._tax ))
+        return( string_tax )
+
+    def generate_random_pension( self ):
+        self._pension = (( self.BS + self.CW + self.OT ) * 0.02 )
+        string_pension = '$' + str( '%.2f' % ( self._pension ))
+        return( string_pension )
+
+    def generate_random_student_loan( self ):
+        self._student_loan = (( self.BS + self.CW + self.OT ) * 0.012 )
+        string_loan = '$' + str( '%.2f' % ( self._student_loan ))
+        return( string_loan )
+
+    def generate_random_NI_payment( self ):
+        self._NI_payment = (( self.BS + self.CW + self.OT ) * 0.011 )
+        string_ni = '$' + str( '%.2f' % ( self._NI_payment ))
+        return( string_ni )
+
+    def generate_random_deductions( self ):
+        DEDUCTIONS = ( self._tax +
+                       self._pension +
+                       self._student_loan +
+                       self._NI_payment )
+        string_deduct = '$' + str( '%2.f' % ( DEDUCTIONS ))
+        return( string_deduct )
+
+    def generate_random_first_name( self ):
+        return( names.get_first_name())
+
+    def generate_random_surname( self ):
+        return( names.get_last_name())
+
+    def generate_random_address( self ):
+        fake = Faker()
+        return( fake.address())
+
+    def generate_random_gender( self ):
+        ''' Random Gender '''
+        RG = random.randint( 1, len( self.ent_gender['values'][:-1] ))
+        return( self.ent_gender['values'][RG] )
+
+    def generate_random_mobile_number( self ):
+        ''' Yes, well, cell phone number '''
+        prefix = ['021', '022', '025', '027', '029']
+        pre_cell = str( secrets.choice( prefix ))
+        num_cell = str( secrets.randbits( 32 ))
+        return( pre_cell + num_cell )
+
+    def create_random_employee_information( self ): # 123
+        self.reference.set( str( secrets.token_hex( 6 )))
+        self.firstname.set( self.generate_random_first_name())
+        self.surname.set( self.generate_random_surname())
+        self.address.set( self.generate_random_address())
+        self.gender.set( self.generate_random_gender())
+        self.mobile.set( self.generate_random_mobile_number())
+        self.city.set( self.generate_random_city_weighting())
+        self.basic_salary.set( self.generate_random_basic_salary())
+        self.over_time.set( self.generate_random_over_time())
+        self.other_payment.set( self.generate_random_other_pay())
+        self.tax.set( self.generate_random_tax())
+        self.pension.set( self.generate_random_pension())
+        self.student_loan.set( self.generate_random_student_loan())
+        self.NI_payment.set( self.generate_random_NI_payment())
+        self.deductions.set( self.generate_random_deductions())
+
+
+
+                              
 if __name__ == '__main__':
     root = tkinter.Tk()
     application = Employee( root )
