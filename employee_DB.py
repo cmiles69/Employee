@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 # coding = utf-8
 import sqlite3
+import os.path
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(BASE_DIR, r'employee.sqlite3' )
+
 
 def get_conn():
     con = None
-    db_file = ( r'employee.sqlite3' )
+    #db_file = ( r'employee.sqlite3' )
     try:
-        con = sqlite3.connect( db_file,
+        con = sqlite3.connect( db_path,
         detect_types = sqlite3.PARSE_COLNAMES | sqlite3.PARSE_DECLTYPES )
         # print( con )
         print( sqlite3.version )
@@ -24,7 +29,7 @@ def delete_employee_record( EMP_REF ):
     conn.commit()
 
 def view_employee_record():
-    view_employee_sql = '''SELECT( Reference,   
+    view_employee_sql = '''SELECT  Reference,   
                                    Firstname,   
                                    Surname,     
                                    Address,     
@@ -36,7 +41,7 @@ def view_employee_record():
                                    Pension,     
                                    Deductions,   
                                    Gross_Pay,
-                                   Net_Pay )
+                                   Net_Pay
                            FROM Employee;''' 
     conn = get_conn()
     conn.row_factory = sqlite3.Row  # table_data['Firstname']
@@ -76,7 +81,7 @@ def add_employee_record( employee_record ):
     return( last_row_id )
 
 def update_employee_record( employee_record ):
-    update_employee_sql = '''UPDATE Employee SET( Reference = ?,   
+    update_employee_sql = '''UPDATE Employee SET  Reference = ?,   
                                                   Firstname = ?,   
                                                   Surname = ?,     
                                                   Address = ?,     
@@ -88,18 +93,18 @@ def update_employee_record( employee_record ):
                                                   Pension = ?,     
                                                   Deductions = ?,   
                                                   Gross_Pay = ?,
-                                                  Net_Pay = ? )
+                                                  Net_Pay = ?
                              WHERE Reference = ?;'''
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute( update_employee_sql, employee_record )
+    cursor.executemany( update_employee_sql, employee_record )
     conn.commit()
     print( 'Employee Record Updated Successfully!' )
     cursor.close()
     conn.close()
     
 def search_employee_record( EMP_REF ):
-    search_employee_sql = '''SELECT( Reference,   
+    search_employee_sql = '''SELECT  Reference,   
                                      Firstname,   
                                      Surname,     
                                      Address,     
@@ -111,18 +116,45 @@ def search_employee_record( EMP_REF ):
                                      Pension,     
                                      Deductions,   
                                      Gross_Pay,
-                                     Net_Pay )
+                                     Net_Pay
                              FROM Employee
                              WHERE Reference = ?;'''
     conn = get_conn()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute( search_employee_sql, ( EMP_REF, ))
-    search_employee_data = cursor.fetchall()
+    search_employee_data = cursor.fetchone()
     cursor.close()
     conn.close()
     print( 'Search Employee Record Is Good!' )
     return( search_employee_data )
+
+def delete_employee_record( EMP_REF ):
+    # delete_employee_sql = '''DELETE FROM Employee 
+    #                                  Reference,   
+    #                                  Firstname,   
+    #                                  Surname,     
+    #                                  Address,     
+    #                                  Gender,      
+    #                                  Mobile,      
+    #                                  NI_Number,   
+    #                                  Student_Loan,
+    #                                  Tax,         
+    #                                  Pension,     
+    #                                  Deductions,   
+    #                                  Gross_Pay,
+    #                                  Net_Pay
+    #                          WHERE Reference = ?;'''
+    delete_employee_sql = '''DELETE FROM Employee 
+                             WHERE Reference = ?'''
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute( delete_employee_sql, ( EMP_REF, ))
+    RC = cursor.rowcount
+    conn.commit()
+    print( 'Employee Record Deleted!' )
+    return( RC )
+
 
 def create_employee_table():
     employee_sql = '''CREATE TABLE IF NOT EXISTS Employee

@@ -124,6 +124,9 @@ class Employee( object ):
         self.btn_font = font.Font( family = 'Bitstream Charter',
                                    size = 16,
                                    weight = 'bold' )
+        self.tree_font = font.Font( family = 'Suruma',
+                                    size = 15,
+                                    weight = 'bold' )
 
 #===========================Variables===================================
 
@@ -655,9 +658,11 @@ class Employee( object ):
 
     def create_widgets_bottom( self ):
         style = ttk.Style()
-        style.configure( 'Treeview.Heading', font = self.lbl_font )
-        style.configure( 'Treeview', background = 'red',
-                                     foreground = 'blue' )
+        style.configure( 'Treeview.Heading', font = self.tree_font )
+        #style.configure( 'Treeview.Tag', tag = self.tree_font )
+        style.configure( 'Treeview', background = 'gold',
+                                     foreground = 'blue',
+                                     font = self.lbl_font )
 
         self.tree_view = ttk.Treeview( self.frm_bottom,
             column = ( 'column1',
@@ -665,17 +670,17 @@ class Employee( object ):
                        'column3',
                        'column4',
                        'column5' ), show = 'headings' )
-        self.tree_view.column( 'column1', width = 100 )
-        self.tree_view.column( 'column2', width = 120 )
-        self.tree_view.column( 'column3', width = 120 )
-        self.tree_view.column( 'column4', width = 120 )
+        self.tree_view.column( 'column1', width = 15 )
+        self.tree_view.column( 'column2', width = 15 )
+        self.tree_view.column( 'column3', width = 15 )
+        self.tree_view.column( 'column4', width = 15 )
         self.tree_view.heading( '#1', text = 'Reference :' )
         self.tree_view.heading( '#2', text = 'First Name :' )
         self.tree_view.heading( '#3', text = 'Surname :' )
         self.tree_view.heading( '#4', text = 'Mobile :' )
         self.tree_view.heading( '#5', text = 'Address :' )
-        # self.tree_view.bind( '<<TreeviewSelect>>',
-        #                     self.On_Tree_Select )
+        self.tree_view.bind( '<<TreeviewSelect>>',
+                             self.On_Tree_Select )
         self.tree_view.place( relx = 0,
                               rely = 0,
                               relwidth = 1,
@@ -698,7 +703,7 @@ class Employee( object ):
             self.tree_view.delete( idx )
         for row in employee_DB.view_employee_record():
             self.tree_view.insert( '', tkinter.END,
-                                    values = ( row[r'Customer_ID'],
+                                    values = ( row[r'Reference'],
                                                row[r'Firstname'],
                                                row[r'Surname'],
                                                row[r'Mobile'],
@@ -791,7 +796,23 @@ class Employee( object ):
         self.gross_pay.set( '' )      
         self.net_pay.set( '' )        
         self.pay_day.set( '' )
-        self.text_scroll_reciept.delete( 1.0, tkinter.END )                                      
+        self.text_scroll_reciept.delete( 1.0, tkinter.END )
+
+    def Delete( self, message = True ):
+        EMP_REF = self.On_Tree_Select( event = None )
+        print( 'Delete EMP_REF', EMP_REF )
+        if message == True:
+            delete_booking = tkinter.messagebox.askyesno(
+                title = 'Employee Management System',
+                message = 'Confirm if you want to delete this employee?.' )
+            if delete_booking > 0:
+                self.Search()
+                RV = employee_DB.delete_employee_record( EMP_REF )
+                self.Display()
+                print( 'Row Count Affected = ', RV )
+            else:
+                return
+
 
 #=======================Button Frame Widgets============================
 
@@ -803,7 +824,7 @@ class Employee( object ):
                             foreground = 'gold',
                             activeforeground = 'gold',
                             activebackground = 'green',
-                            #command = self.Add_New,
+                            command = self.Add_New,
                             text = 'Add New' )
         self.btn_add_new.place( relx = 0.006,
                                 rely = 0,
@@ -829,7 +850,7 @@ class Employee( object ):
                             foreground = 'gold',
                             activeforeground = 'gold',
                             activebackground = 'green',
-                            #command = self.Display,
+                            command = self.Display,
                             text = 'Display' )
         self.btn_display.place( relx = 0.167,
                                 rely = 0,
@@ -842,7 +863,7 @@ class Employee( object ):
                             foreground = 'gold',
                             activeforeground = 'gold',
                             activebackground = 'green',
-                            #command = self.Update,
+                            command = self.Update,
                             text = 'Update' )
         self.btn_update.place( relx = 0.250,
                                rely = 0,
@@ -855,7 +876,7 @@ class Employee( object ):
                             foreground = 'gold',
                             activeforeground = 'gold',
                             activebackground = 'black',
-                            #command = self.Delete,
+                            command = self.Delete,
                             text = 'Delete' )
         self.btn_delete.place( relx = 0.332,
                                rely = 0,
@@ -887,6 +908,19 @@ class Employee( object ):
                               rely = 0,
                               relheight = 1 )
 
+        self.btn_search = tkinter.Button( self.frm_buttons,
+                            font = self.btn_font,
+                            borderwidth = 4,
+                            background = 'AntiqueWhite4',
+                            foreground = 'gold',
+                            activeforeground = 'red',
+                            activebackground = 'powder blue',
+                            command = self.Search,
+                            text = 'Search' )
+        self.btn_search.place( relx = 0.567,
+                               rely = 0,
+                               relheight = 1 )
+
         self.btn_exit = tkinter.Button( self.frm_buttons,
                             font = self.btn_font,
                             borderwidth = 4,
@@ -896,7 +930,7 @@ class Employee( object ):
                             activebackground = 'gray8',
                             command = self.Ask_Quit,
                             text = 'Exit' )
-        self.btn_exit.place( relx = 0.567,
+        self.btn_exit.place( relx = 0.646,
                              rely = 0,
                              relheight = 1 )
 
