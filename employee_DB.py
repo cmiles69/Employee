@@ -21,7 +21,7 @@ def get_conn():
         print( e )
 
 def delete_employee_record( EMP_REF ):
-    delete_employee_sql = '''DELETE * FROM Employee
+    delete_employee_sql = '''DELETE FROM Employee
                              WHERE Reference = ?;'''
     conn = get_conn()
     cursor = conn.cursor()
@@ -29,19 +29,30 @@ def delete_employee_record( EMP_REF ):
     conn.commit()
 
 def view_employee_record():
-    view_employee_sql = '''SELECT  Reference,   
-                                   Firstname,   
-                                   Surname,     
-                                   Address,     
-                                   Gender,      
-                                   Mobile,      
-                                   NI_Number,   
-                                   Student_Loan,
-                                   Tax,         
-                                   Pension,     
-                                   Deductions,   
-                                   Gross_Pay,
-                                   Net_Pay
+    view_employee_sql = '''SELECT   Reference          ,
+                                    Firstname          ,
+                                    Surname            ,
+                                    Address            ,
+                                    Gender             ,
+                                    Mobile             ,
+                                    City_Weighting     ,
+                                    Other_Payment      ,
+                                    Basic_Salary       ,
+                                    Over_Time          ,
+                                    Student_Loan       ,
+                                    NI_Payment         ,
+                                    Pension            ,
+                                    Tax                ,
+                                    Pensionable_Pay    ,
+                                    Taxable_Pay        ,
+                                    Tax_Period         ,
+                                    Tax_Code           ,
+                                    NI_Number          ,
+                                    NI_Code            ,
+                                    Deductions         ,
+                                    Gross_Pay          ,
+                                    Net_Pay            ,
+                                    Pay_Day            
                            FROM Employee;''' 
     conn = get_conn()
     conn.row_factory = sqlite3.Row  # table_data['Firstname']
@@ -54,21 +65,32 @@ def view_employee_record():
     return( view_employee_data )
 
 def add_employee_record( employee_record ):
-    add_employee_sql = '''INSERT INTO Employee(
-                                Reference,   
-                                Firstname,   
-                                Surname,     
-                                Address,     
-                                Gender,      
-                                Mobile,      
-                                NI_Number,   
-                                Student_Loan,
-                                Tax,         
-                                Pension,     
-                                Deductions,   
-                                Gross_Pay,
-                                Net_Pay )
-                          VALUES( ?,?,?,?,?,?,?,?,?,?,?,?,? );'''
+    add_employee_sql = '''INSERT OR REPLACE INTO Employee(
+                                                 Reference          ,
+                                                 Firstname          ,
+                                                 Surname            ,
+                                                 Address            ,
+                                                 Gender             ,
+                                                 Mobile             ,
+                                                 City_Weighting     ,
+                                                 Other_Payment      ,
+                                                 Basic_Salary       ,
+                                                 Over_Time          ,
+                                                 Student_Loan       ,
+                                                 NI_Payment         ,
+                                                 Pension            ,
+                                                 Tax                ,
+                                                 Pensionable_Pay    ,
+                                                 Taxable_Pay        ,
+                                                 Tax_Period         ,
+                                                 Tax_Code           ,
+                                                 NI_Number          ,
+                                                 NI_Code            ,
+                                                 Deductions         ,
+                                                 Gross_Pay          ,
+                                                 Net_Pay            ,
+                                                 Pay_Day )            
+        VALUES( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? );'''
     conn = get_conn()
     cursor = conn.cursor()
     cursor.executemany( add_employee_sql, employee_record )
@@ -81,19 +103,30 @@ def add_employee_record( employee_record ):
     return( last_row_id )
 
 def update_employee_record( employee_record ):
-    update_employee_sql = '''UPDATE Employee SET  Reference = ?,   
-                                                  Firstname = ?,   
-                                                  Surname = ?,     
-                                                  Address = ?,     
-                                                  Gender = ?,      
-                                                  Mobile = ?,      
-                                                  NI_Number = ?,   
-                                                  Student_Loan = ?,
-                                                  Tax = ?,         
-                                                  Pension = ?,     
-                                                  Deductions = ?,   
-                                                  Gross_Pay = ?,
-                                                  Net_Pay = ?
+    update_employee_sql = '''UPDATE Employee SET Reference          = ?, 
+                                                 Firstname          = ?,
+                                                 Surname            = ?,
+                                                 Address            = ?,
+                                                 Gender             = ?,
+                                                 Mobile             = ?,
+                                                 City_Weighting     = ?,
+                                                 Other_Payment      = ?,
+                                                 Basic_Salary       = ?,
+                                                 Over_Time          = ?,
+                                                 Student_Loan       = ?,
+                                                 NI_Payment         = ?,
+                                                 Pension            = ?,
+                                                 Tax                = ?,
+                                                 Pensionable_Pay    = ?,
+                                                 Taxable_Pay        = ?,
+                                                 Tax_Period         = ?,
+                                                 Tax_Code           = ?,
+                                                 NI_Number          = ?,
+                                                 NI_Code            = ?,
+                                                 Deductions         = ?,
+                                                 Gross_Pay          = ?,
+                                                 Net_Pay            = ?,
+                                                 Pay_Day            = ?            
                              WHERE Reference = ?;'''
     conn = get_conn()
     cursor = conn.cursor()
@@ -104,19 +137,30 @@ def update_employee_record( employee_record ):
     conn.close()
     
 def search_employee_record( EMP_REF ):
-    search_employee_sql = '''SELECT  Reference,   
-                                     Firstname,   
-                                     Surname,     
-                                     Address,     
-                                     Gender,      
-                                     Mobile,      
-                                     NI_Number,   
-                                     Student_Loan,
-                                     Tax,         
-                                     Pension,     
-                                     Deductions,   
-                                     Gross_Pay,
-                                     Net_Pay
+    search_employee_sql = '''SELECT Reference          ,      
+                                    Firstname          ,
+                                    Surname            ,        
+                                    Address            ,
+                                    Gender             ,
+                                    Mobile             ,
+                                    City_Weighting     ,
+                                    Other_Payment      ,
+                                    Basic_Salary       ,
+                                    Over_Time          ,
+                                    Student_Loan       ,
+                                    NI_Payment         ,
+                                    Pension            ,
+                                    Tax                ,
+                                    Pensionable_Pay    ,
+                                    Taxable_Pay        ,
+                                    Tax_Period         ,
+                                    Tax_Code           ,
+                                    NI_Number          ,
+                                    NI_Code            ,
+                                    Deductions         ,
+                                    Gross_Pay          ,
+                                    Net_Pay            ,
+                                    Pay_Day            
                              FROM Employee
                              WHERE Reference = ?;'''
     conn = get_conn()
@@ -130,21 +174,6 @@ def search_employee_record( EMP_REF ):
     return( search_employee_data )
 
 def delete_employee_record( EMP_REF ):
-    # delete_employee_sql = '''DELETE FROM Employee 
-    #                                  Reference,   
-    #                                  Firstname,   
-    #                                  Surname,     
-    #                                  Address,     
-    #                                  Gender,      
-    #                                  Mobile,      
-    #                                  NI_Number,   
-    #                                  Student_Loan,
-    #                                  Tax,         
-    #                                  Pension,     
-    #                                  Deductions,   
-    #                                  Gross_Pay,
-    #                                  Net_Pay
-    #                          WHERE Reference = ?;'''
     delete_employee_sql = '''DELETE FROM Employee 
                              WHERE Reference = ?'''
     conn = get_conn()
@@ -159,23 +188,34 @@ def delete_employee_record( EMP_REF ):
 def create_employee_table():
     employee_sql = '''CREATE TABLE IF NOT EXISTS Employee
                       ( id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Reference     TEXT,
-                        Firstname     TEXT,
-                        Surname       TEXT,
-                        Address       TEXT,
-                        Gender        TEXT,
-                        Mobile        TEXT,
-                        NI_Number     TEXT,
-                        Student_Loan  TEXT,
-                        Tax           TEXT,
-                        Pension       TEXT,
-                        Deductions    TEXT,
-                        Gross_Pay     TEXT,
-                        Net_Pay       TEXT
+                        Reference          TEXT,
+                        Firstname          TEXT,
+                        Surname            TEXT,
+                        Address            TEXT,
+                        Gender             TEXT,
+                        Mobile             TEXT,
+                        City_Weighting     TEXT,
+                        Other_Payment      TEXT,
+                        Basic_Salary       TEXT,
+                        Over_Time          TEXT,
+                        Student_Loan       TEXT,
+                        NI_Payment         TEXT,
+                        Pension            TEXT,
+                        Tax                TEXT,
+                        Pensionable_Pay    TEXT,
+                        Taxable_Pay        TEXT,
+                        Tax_Period         TEXT,
+                        Tax_Code           TEXT,
+                        NI_Number          TEXT,
+                        NI_Code            TEXT, 
+                        Deductions         TEXT,
+                        Gross_Pay          TEXT,
+                        Net_Pay            TEXT,
+                        Pay_Day            TEXT
                          );'''
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute( employee_sql )
+    cursor.executescript( employee_sql )
     conn.commit()
     print( 'Created Employee Table Successfully!' )
     cursor.close()

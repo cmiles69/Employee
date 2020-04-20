@@ -2,7 +2,7 @@
 # coding = utf-8
 
 # https://www.youtube.com/watch?v=1rzaEXL016g Captain D.J Oamen
-# 25:10, 28:26, 38:23, 43:40, 48:00, 54:35, 57:55
+# 25:10, 28:26, 38:23, 43:40, 48:00, 54:35, 57:55, 1:07:48
 
 import tkinter
 import tkinter.scrolledtext as tkst
@@ -11,6 +11,9 @@ import names
 import random
 import employee_DB
 import tkinter.messagebox
+import os
+import subprocess
+import tempfile
 from tkinter import font
 from tkinter import ttk
 from tkcalendar import DateEntry
@@ -114,7 +117,10 @@ class Employee( object ):
 #===========================Fonts=======================================
 
     def create_fonts( self ):
-        
+
+        self.txt_font = font.Font( family = 'DejaVu Serif',
+                                   size = 12,
+                                   weight = 'bold' )        
         self.lbl_font = font.Font( family = 'DejaVu Serif',
                                    size = 15,
                                    weight = 'bold' )
@@ -137,11 +143,11 @@ class Employee( object ):
         self.address         = tkinter.StringVar()
         self.gender          = tkinter.StringVar()
         self.mobile          = tkinter.StringVar()
-        self.city            = tkinter.IntVar()
+        self.city            = tkinter.StringVar()
         self.student_loan    = tkinter.StringVar()
         self.other_payment   = tkinter.StringVar()
         self.NI_payment      = tkinter.StringVar()
-        self.basic_salary    = tkinter.IntVar()
+        self.basic_salary    = tkinter.StringVar()
         self.pension         = tkinter.StringVar()
         self.over_time       = tkinter.StringVar()
         self.tax             = tkinter.StringVar()
@@ -645,7 +651,7 @@ class Employee( object ):
 
     def create_widgets_right( self ):
         self.text_scroll_reciept = tkst.ScrolledText( self.frm_right,
-                            font = self.lbl_font,
+                            font = self.txt_font,
                             borderwidth = 5,
                             background = 'LightPink4',
                             relief = tkinter.RIDGE )
@@ -716,32 +722,55 @@ class Employee( object ):
                                   self.address.get(),        
                                   self.gender.get(),         
                                   self.mobile.get(),
-                                  self.NI_number.get(),
+                                  self.city.get(),
+                                  self.other_payment.get(),
+                                  self.basic_salary.get(),
+                                  self.over_time.get(),
                                   self.student_loan.get(),
-                                  self.tax.get(),
+                                  self.NI_payment.get(),
                                   self.pension.get(),
+                                  self.tax.get(),
+                                  self.pensionable_pay.get(),
+                                  self.taxable_pay.get(),
+                                  self.tax_period.get(),
+                                  self.tax_code.get(),
+                                  self.NI_number.get(),
+                                  self.NI_code.get(),      
                                   self.deductions.get(),
                                   self.gross_pay.get(),
-                                  self.net_pay.get())]
+                                  self.net_pay.get(),
+                                  self.pay_day.get())]
         last_row_id = \
         employee_DB.add_employee_record( self.employee_record )
         print( 'Last Row ID is :', last_row_id )
 
     def Update( self ):
         EMP_REF = self.reference.get()
-        self.employee_record = [( self.reference.get(),      
-                                  self.firstname.get(),      
-                                  self.surname.get(),        
-                                  self.address.get(),        
-                                  self.gender.get(),         
-                                  self.mobile.get(),
-                                  self.NI_number.get(),
-                                  self.student_loan.get(),
-                                  self.tax.get(),
-                                  self.pension.get(),
-                                  self.deductions.get(),
-                                  self.gross_pay.get(),
-                                  self.net_pay.get(), EMP_REF )]
+        self.employee_record =   [( self.reference.get(),      
+                                    self.firstname.get(),      
+                                    self.surname.get(),        
+                                    self.address.get(),        
+                                    self.gender.get(),         
+                                    self.mobile.get(),
+                                    self.city.get(),
+                                    self.other_payment.get(),
+                                    self.basic_salary.get(),
+                                    self.over_time.get(),
+                                    self.student_loan.get(),
+                                    self.NI_payment.get(),
+                                    self.pension.get(),
+                                    self.tax.get(),
+                                    self.pensionable_pay.get(),
+                                    self.taxable_pay.get(),
+                                    self.tax_period.get(),
+                                    self.tax_code.get(),
+                                    self.NI_number.get(),
+                                    self.NI_code.get(),      
+                                    self.deductions.get(),
+                                    self.gross_pay.get(),
+                                    self.net_pay.get(),
+                                    self.pay_day.get(), EMP_REF )]
+
         employee_DB.update_employee_record( self.employee_record )
 
     def Search( self ):
@@ -754,13 +783,25 @@ class Employee( object ):
         self.address.set( search_data[r'Address'])        
         self.gender.set( search_data[r'Gender'])         
         self.mobile.set( search_data[r'Mobile'])
-        self.NI_number.set( search_data[r'NI_Number'])
+        self.city.set( search_data[r'City_Weighting'])
+        self.other_payment.set( search_data[r'Other_Payment'])
+        self.basic_salary.set( search_data[r'Basic_Salary'])
+        self.over_time.set( search_data[r'Over_Time'])
         self.student_loan.set( search_data[r'Student_Loan'])
-        self.tax.set( search_data[r'Tax'])
+        self.NI_payment.set( search_data[r'NI_Payment'])
         self.pension.set( search_data[r'Pension'])
+        self.tax.set( search_data[r'Tax'])
+        self.pensionable_pay.set( search_data[r'Pensionable_Pay'])
+        self.taxable_pay.set( search_data[r'Taxable_Pay'])
+        self.tax_period.set( search_data[r'Tax_Period'])
+        self.tax_code.set( search_data[r'Tax_Code'])
+        self.NI_number.set( search_data[r'NI_Number'])
+        self.NI_code.set( search_data[r'NI_Code'])
         self.deductions.set( search_data[r'Deductions'])
         self.gross_pay.set( search_data[r'Gross_pay'])
         self.net_pay.set( search_data[r'Net_pay'])
+        self.pay_day.set( search_data[r'Pay_Day'])
+        self.fill_text_reciept()
 
 
     def On_Tree_Select(self, event):
@@ -795,7 +836,7 @@ class Employee( object ):
         self.deductions.set( '' )     
         self.gross_pay.set( '' )      
         self.net_pay.set( '' )        
-        self.pay_day.set( '' )
+        #self.pay_day.set( '' )
         self.text_scroll_reciept.delete( 1.0, tkinter.END )
 
     def Delete( self, message = True ):
@@ -812,6 +853,73 @@ class Employee( object ):
                 print( 'Row Count Affected = ', RV )
             else:
                 return
+
+    def fill_text_reciept( self ):
+        if len( self.text_scroll_reciept.get( 1.0, tkinter.END )) >= 1:
+            self.text_scroll_reciept.delete( 1.0, tkinter.END )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, '\tMonthly Pay Slip'
+                            + '\n\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Reference:    '+
+                            self.reference.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'First Name:   '+
+                            self.firstname.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Surname:      '+
+                            self.surname.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Pay Date:      '+
+                            self.pay_day.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, '\n\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Tax:                      '+
+                            self.tax.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Pension:               '+
+                            self.pension.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Student Loan:       '+
+                            self.student_loan.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'City Wheighting:   '+
+                            self.city.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Deductions:          '+
+                            self.deductions.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'NI Payment:          '+
+                            self.NI_payment.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'NI Number:           '+
+                            self.NI_number.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, '\n\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Over Time:         '+
+                            self.over_time.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Tax Paid:            '+
+                            self.taxable_pay.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Gross Pay:          '+
+                            self.gross_pay.get() + '\n' )
+        self.text_scroll_reciept.insert( 
+                            tkinter.END, 'Net Pay:             '+
+                            self.net_pay.get() + '\n' )
+                         
+
+    def Print_Reciept( self ):
+        tmp = self.text_scroll_reciept.get( 1.0, 'tkinter.END - 1c' )
+        tmp_file = tempfile.mktemp( '.txt' )
+        open( tmp_file, 'w' ).write( tmp )
+        os.startfile( tmp_file, 'print' )
+
+        # lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
+        # lpr.stdin.write(your_data_here) 
+        
 
 
 #=======================Button Frame Widgets============================
@@ -1007,7 +1115,8 @@ class Employee( object ):
 
     def generate_random_tax_code( self ):
         taxcode = secrets.token_hex( 4 )
-        string_tax_code = ( str( 'TC-' + taxcode ))
+        #string_tax_code = ( str( 'TC-' + taxcode ))
+        string_tax_code = ( str( taxcode ))
         return( string_tax_code )
 
     def generate_random_tax_period( self ):
