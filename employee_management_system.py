@@ -4,6 +4,10 @@
 # https://www.youtube.com/watch?v=1rzaEXL016g Captain D.J Oamen
 # 25:10, 28:26, 38:23, 43:40, 48:00, 54:35, 57:55, 1:07:48
 
+# Craig Miles
+# https://github.com/cmiles69/Employee.git
+
+
 import tkinter
 import tkinter.scrolledtext as tkst
 import secrets
@@ -915,20 +919,12 @@ class Employee( object ):
         tmp = self.text_scroll_reciept.get( 1.0, 'end-1c' )
         tmp_file = tempfile.mktemp( '.txt' )
         open( tmp_file, 'w' ).write( tmp )
-        # close( tmp_file )
-        #os.startfile( tmp_file, 'print' )
-        
+                
         with open( tmp_file ) as f:
-
             # call the system's lpr command
             p = subprocess.Popen(["lpr"], stdin=f, shell=True)  # not sure you need shell=True for a simple command
-            #p.stdin.write( tmp_file )
             output = p.communicate()[0]
-            #lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
-            #lpr.stdin.write( tmp_file ) 
-        
-
-
+      
 #=======================Button Frame Widgets============================
 
     def create_widgets_button( self ):
