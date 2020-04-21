@@ -870,30 +870,30 @@ class Employee( object ):
                             tkinter.END, 'Surname:      '+
                             self.surname.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'Pay Date:      '+
+                            tkinter.END, 'Pay Date:     '+
                             self.pay_day.get() + '\n' )
         self.text_scroll_reciept.insert( 
                             tkinter.END, '\n\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'Tax:                      '+
+                            tkinter.END, 'Tax:                '+
                             self.tax.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'Pension:               '+
+                            tkinter.END, 'Pension:            '+
                             self.pension.get() + '\n' )
         self.text_scroll_reciept.insert( 
                             tkinter.END, 'Student Loan:       '+
                             self.student_loan.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'City Wheighting:   '+
+                            tkinter.END, 'City Wheighting:    '+
                             self.city.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'Deductions:          '+
+                            tkinter.END, 'Deductions:         '+
                             self.deductions.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'NI Payment:          '+
+                            tkinter.END, 'NI Payment:         '+
                             self.NI_payment.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'NI Number:           '+
+                            tkinter.END, 'NI Number:          '+
                             self.NI_number.get() + '\n' )
         self.text_scroll_reciept.insert( 
                             tkinter.END, '\n\n' )
@@ -901,24 +901,31 @@ class Employee( object ):
                             tkinter.END, 'Over Time:         '+
                             self.over_time.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'Tax Paid:            '+
+                            tkinter.END, 'Tax Paid:          '+
                             self.taxable_pay.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'Gross Pay:          '+
+                            tkinter.END, 'Gross Pay:         '+
                             self.gross_pay.get() + '\n' )
         self.text_scroll_reciept.insert( 
-                            tkinter.END, 'Net Pay:             '+
+                            tkinter.END, 'Net Pay:           '+
                             self.net_pay.get() + '\n' )
                          
 
     def Print_Reciept( self ):
-        tmp = self.text_scroll_reciept.get( 1.0, 'tkinter.END - 1c' )
+        tmp = self.text_scroll_reciept.get( 1.0, 'end-1c' )
         tmp_file = tempfile.mktemp( '.txt' )
         open( tmp_file, 'w' ).write( tmp )
-        os.startfile( tmp_file, 'print' )
+        # close( tmp_file )
+        #os.startfile( tmp_file, 'print' )
+        
+        with open( tmp_file ) as f:
 
-        # lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
-        # lpr.stdin.write(your_data_here) 
+            # call the system's lpr command
+            p = subprocess.Popen(["lpr"], stdin=f, shell=True)  # not sure you need shell=True for a simple command
+            #p.stdin.write( tmp_file )
+            output = p.communicate()[0]
+            #lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
+            #lpr.stdin.write( tmp_file ) 
         
 
 
@@ -945,7 +952,7 @@ class Employee( object ):
                             foreground = 'black',
                             activeforeground = 'gold',
                             activebackground = 'green',
-                            #command = self.Print,
+                            command = self.Print_Reciept,
                             text = 'Print' )
         self.btn_print.place( relx = 0.101,
                               rely = 0,
