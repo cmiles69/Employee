@@ -18,6 +18,7 @@ import tkinter.messagebox
 import os
 import subprocess
 import tempfile
+import sys
 from tkinter import font
 from tkinter import ttk
 from tkcalendar import DateEntry
@@ -919,11 +920,14 @@ class Employee( object ):
         tmp = self.text_scroll_reciept.get( 1.0, 'end-1c' )
         tmp_file = tempfile.mktemp( '.txt' )
         open( tmp_file, 'w' ).write( tmp )
-                
-        with open( tmp_file ) as f:
-            # call the system's lpr command
-            p = subprocess.Popen(["lpr"], stdin=f, shell=True)  # not sure you need shell=True for a simple command
-            output = p.communicate()[0]
+        if sys.platform.startswith( 'win' ):
+            os.startfile( tmp_file, 'print' )
+        else:
+            if sys.platform == 'linux':
+                with open( tmp_file ) as f:
+                    # call the system's lpr command
+                    p = subprocess.Popen(["lpr"], stdin=f, shell=True)  # not sure you need shell=True for a simple command
+                    output = p.communicate()[0]
       
 #=======================Button Frame Widgets============================
 
